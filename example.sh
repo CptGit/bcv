@@ -3,13 +3,13 @@
 ### Usage:
 ### ./example.sh --main hello --msg "2021"
 
-readonly BCV_DIR="./BCV" # the directory of BCV.
+readonly BCV_DIR="." # the directory of BCV.
 
 
 ### Imports.
 ### --------
 
-. ${BCV_DIR}/Main.sh # Must import Main.sh of BCV
+. ${BCV_DIR}/BCV/Main.sh # Must import Main.sh of BCV
 
 
 ### Fields.
