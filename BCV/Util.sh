@@ -183,12 +183,21 @@ function millis_to_human_readable_format() {
 ### List directories and files.
 ### ---------------------------
 
-function list_dir_names() {
+function list_dirs() {
         ### List all the directories non-recursively under the given
         ### path.
         local path="${1}"; shift
 
         echo "$( find "${path}" -maxdepth 1 -mindepth 1 -type d | sed 's/.*\///' | sort -V )"
+}
+
+function list_files() {
+        ### List all the files with a name matching the given pattern
+        ### under the given path.
+        local path="$1"; shift
+        local pattern="$1"; shift
+
+        echo "$( find "${path}" -maxdepth 1 -mindepth 1 -type f -name "${pattern}" | xargs -I{} basename {} | sort -V )"
 }
 
 function list_file_paths() {
