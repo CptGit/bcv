@@ -178,3 +178,24 @@ function millis_to_human_readable_format() {
 
         echo "${output}"
 }
+
+
+### List directories and files.
+### ---------------------------
+
+function list_dir_names() {
+        ### List all the directories non-recursively under the given
+        ### path.
+        local path="${1}"; shift
+
+        echo "$( find "${path}" -maxdepth 1 -mindepth 1 -type d | sed 's/.*\///' | sort -V )"
+}
+
+function list_file_paths() {
+        ### List the absolute paths of all the files with a name
+        ### matching the given pattern under the given path.
+        local path="$1"; shift
+        local pattern="$1"; shift
+
+        echo "$( find "${path}" -maxdepth 1 -mindepth 1 -type f -name "${pattern}" | sort -V )"
+}
