@@ -3,7 +3,8 @@
 ### Usage:
 ### ./example.sh --main hello --msg "2021"
 
-readonly BCV_DIR="." # the directory of BCV.
+readonly _DIR=$( cd -P "$( dirname "$( readlink -f "${BASH_SOURCE[0]}" )" )" && pwd )
+readonly BCV_DIR="${_DIR}" # Specify the path to BCV.
 
 
 ### Imports.

@@ -44,6 +44,28 @@ function is_variable_set() {
         return $ret
 }
 
+function print_stacktrace() {
+        ### Print stack trace from the current subroutine call.
+
+        local frame=0 line sub file
+        while read line sub file < <(caller "$frame"); do
+                printf '        at %s(%s:%s)\n' "${sub}" "${file}" "${line}"
+                ((frame++))
+        done
+}
+
+function get_entry_script() {
+        ### Get the name of script at the bottom frame.
+
+        local frame=0
+        local file prev_file _
+        while read _ _ file < <(caller "$frame"); do
+                ((frame++))
+                prev_file="$file"
+        done
+        echo "${prev_file}"
+}
+
 
 ### Log.
 ### ----
@@ -78,6 +100,7 @@ function log0() {
                 ;;
         'e'|'error')
                 println_err "${prefix}ERROR: ${msg}"
+                print_stacktrace
                 ## TODO: is it good to exit here?
                 exit 1
                 ;;

@@ -67,7 +67,9 @@ function parse_args() {
                         is_pos=1
                         shift
                 else
-                        log e "unrecognized argument: $arg"
+                        println_err "unrecognized argument: $arg"
+                        print_hint_text
+                        exit 1
                 fi
         done
 
@@ -111,12 +113,20 @@ function set_fields() {
 function print_help_text() {
         ### Print predefined help text to std out.
 
-        println "Usage: SCRIPT --main FUNCTION --FIELD VALUE"
+        println "Usage: SCRIPT --main FUNCTION --FIELD1 VALUE1 --FIELD2 VALUE2"
         println "Framework for running your bash scripts."
         println "Example: ./example.sh --main hello --msg 2021"
         println
         println "Options:"
         println "  --help display this help text and exit"
+}
+
+function print_hint_text() {
+        ### Print predefined error text to std out.
+
+        println "Usage: SCRIPT --main FUNCTION --FIELD1 VALUE1 --FIELD2 VALUE2"
+        
+        println "Try \'$( get_entry_script ) --help\' for more information."
 }
 
 
@@ -134,12 +144,14 @@ function main() {
 
         ## Check if main is set
         if [[ -z ${_r_main} ]]; then
-                log e "main function is NOT specified!"
+                println_err "main function is NOT specified!"
+                exit 1
         fi
 
         ## Check if main is a valid function
         if ! is_function_set "$_r_main"; then
-                log e "function $_r_main is NOT defined!"
+                println_err "function $_r_main is NOT defined!"
+                exit 1
         fi
 
         set_fields
