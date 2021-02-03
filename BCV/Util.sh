@@ -186,7 +186,7 @@ function millis_to_human_readable_format() {
 function list_dirs() {
         ### List all the directories non-recursively under the given
         ### path.
-        local path="${1}"; shift
+        local path="$1"; shift
 
         echo "$( find "${path}" -maxdepth 1 -mindepth 1 -type d | sed 's/.*\///' | sort -V )"
 }
@@ -194,7 +194,7 @@ function list_dirs() {
 function list_dir_paths() {
         ### List all the directories non-recursively under the given
         ### path.
-        local path="${1}"; shift
+        local path="$1"; shift
 
         echo "$( find "${path}" -maxdepth 1 -mindepth 1 -type d | sort -V )"
 }
@@ -203,16 +203,24 @@ function list_files() {
         ### List all the files with a name matching the given pattern
         ### under the given path.
         local path="$1"; shift
-        local pattern="$1"; shift
+        if [[ $# -gt 0 ]]; then
+                local pattern="$1"
+        else
+                local pattern="*"
+        fi
 
-        echo "$( find "${path}" -maxdepth 1 -mindepth 1 -type f -name "${pattern}" | xargs -I{} basename {} | sort -V )"
+        list_file_paths "$path" "$pattern" | xargs -I{} basename {}
 }
 
 function list_file_paths() {
         ### List the absolute paths of all the files with a name
         ### matching the given pattern under the given path.
         local path="$1"; shift
-        local pattern="$1"; shift
+        if [[ $# -gt 0 ]]; then
+                local pattern="$1"
+        else
+                local pattern="*"
+        fi
 
-        echo "$( find "${path}" -maxdepth 1 -mindepth 1 -type f -name "${pattern}" | sort -V )"
+        find "${path}" -maxdepth 1 -mindepth 1 -type f -name "${pattern}" | sort -V
 }
