@@ -153,7 +153,7 @@ function assert_file_exists() {
         ### @file the path of the given file
 
         local file="$1"; shift
-        test -f "$file" || log e "$file does NOT exist!"
+        test -f "$file" || log e "File $file does NOT exist!"
 }
 
 
