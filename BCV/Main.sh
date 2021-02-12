@@ -9,6 +9,13 @@ readonly BCV_ROOT_DIR=$( cd -P "$( dirname "$( readlink -f "${BASH_SOURCE[0]}" )
 # set -u
 
 
+### Directories.
+### ------------
+
+readonly DOT_DIR=".bcv"
+readonly LOGS_DIR="${DOT_DIR}/logs"; mkdir -p ${LOGS_DIR}
+
+
 ### Imports.
 ### --------
 
@@ -157,6 +164,51 @@ function main() {
         set_fields
 
         ## Execute the function
-        $_r_main "${_r_positional[@]}"
-        return "$?"
+        ## https://wiki.bash-hackers.org/howto/redirection_tutorial
+        ## {
+        ##         {
+        ##                 cmd1 3>&- |
+        ##                         cmd2 2>&3 3>&-
+        ##         } 2>&1 >&4 4>&- |
+        ##                 cmd3 3>&- 4>&-
+        ## } 3>&2 4>&1
+        ##
+        ##                                                            cmd2
+        ##
+        ##                                            ---       +-------------+
+        ##                                        -->( 0 ) ---->| 1st pipe    |
+        ##                                       /    ---       +-------------+
+        ##                                      /
+        ##                                     /      ---       +-------------+
+        ##          cmd 1                     /      ( 1 ) ---->| /dev/pts/5  |
+        ##                                   /        ---       +-------------+
+        ##                                  /
+        ##  ---       +-------------+      /          ---       +-------------+
+        ## ( 0 ) ---->| /dev/pts/5  |     /          ( 2 ) ---->| /dev/pts/5  |
+        ##  ---       +-------------+    /            ---       +-------------+
+        ##                              /
+        ##  ---       +-------------+  /                       cmd3
+        ## ( 1 ) ---->| 1st pipe    | /
+        ##  ---       +-------------+                 ---       +-------------+
+        ##                              ------------>( 0 ) ---->| 2nd pipe    |
+        ##  ---       +-------------+ /               ---       +-------------+
+        ## ( 2 ) ---->| 2nd pipe    |/
+        ##  ---       +-------------+                 ---       +-------------+
+        ##                                           ( 1 ) ---->| /dev/pts/5  |
+        ##                                            ---       +-------------+
+        ##
+        ##                                            ---       +-------------+
+        ##                                           ( 2 ) ---->| /dev/pts/5  |
+        ##                                            ---       +-------------+
+
+        local log_file="${LOGS_DIR}/$( date --iso-8601=ns ).log"
+        touch ${log_file}
+        log d "${log_file}"
+        {
+                {
+                        $_r_main "${_r_positional[@]}" 3>&- >>"${log_file}"
+                } 2>&1 >&4 4>&- |
+                        tee -a "${log_file}" 3>&- 4>&-
+        } 3>&2 4>&1
+        return "${PIPESTATUS[0]}"
 }
