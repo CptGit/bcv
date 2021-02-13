@@ -31,6 +31,7 @@ declare -a _r_optargs=()
 declare -a _r_positional=()
 
 _r_main="" ## function as entry
+_r_logs_dir="${LOGS_DIR}" ## directory of logs
 
 function parse_args() {
         ### Parse arguments.
@@ -53,6 +54,10 @@ function parse_args() {
                         _r_main="$2"
                         shift # past key
                         shift # past value
+                elif [[ $arg == '--logs_dir' ]]; then
+                        _r_logs_dir="$2"
+                        shift
+                        shift
                 elif [[ $arg =~ \-\-[[:alnum:]_][[:alnum:]]* ]]; then
                         local key="${arg:2}"
                         if [[ $# -eq 1 || $2 == '--'* ]]; then
@@ -201,8 +206,8 @@ function main() {
         ##                                           ( 2 ) ---->| /dev/pts/5  |
         ##                                            ---       +-------------+
 
-        local log_file="${LOGS_DIR}/$( date --iso-8601=ns ).log"
-        touch ${log_file}
+        local log_file="${_r_logs_dir}/$( date --iso-8601=ns ).log"
+        mkdir -p ${_r_logs_dir} && touch ${log_file}
         log d "${log_file}"
         {
                 {
