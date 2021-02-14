@@ -13,7 +13,7 @@ readonly BCV_ROOT_DIR=$( cd -P "$( dirname "$( readlink -f "${BASH_SOURCE[0]}" )
 ### ------------
 
 readonly DOT_DIR=".bcv"
-readonly LOGS_DIR="${DOT_DIR}/logs"; mkdir -p ${LOGS_DIR}
+readonly LOGS_DIR="${DOT_DIR}/logs"
 
 
 ### Imports.
