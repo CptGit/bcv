@@ -90,6 +90,16 @@ function log_d() {
         log d "$msg"
 }
 
+function log_e_and_exit() {
+        ### Log at error level and then exit with 1.
+        ### @msg text of log
+
+        local msg="$1"; shift
+
+        log_e "$msg"
+        exit 1
+}
+
 function log_e() {
         ### Log at error level.
         ### @msg text of log
