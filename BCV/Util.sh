@@ -72,6 +72,33 @@ function get_entry_script() {
 ### Log.
 ### ----
 
+function log_i() {
+        ### Log at info level.
+        ### @msg text of log
+
+        local msg="$1"; shift
+
+        log i "$msg"
+}
+
+function log_d() {
+        ### Log at debugging level.
+        ### @msg text of log
+
+        local msg="$1"; shift
+
+        log d "$msg"
+}
+
+function log_e() {
+        ### Log at error level.
+        ### @msg text of log
+
+        local msg="$1"; shift
+
+        log e "$msg"
+}
+
 function log() {
         ### Log.
         ### @level log level, one of "info, debug, error or warning"
