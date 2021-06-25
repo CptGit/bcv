@@ -140,8 +140,6 @@ function log0() {
         'e'|'error')
                 println_err "${prefix}ERROR: ${msg}"
                 println_err "$( get_stacktrace )"
-                ## TODO: is it good to exit here?
-                exit 1
                 ;;
         'w'|'warning')
                 println_err "${prefix}WARNING: ${msg}"
