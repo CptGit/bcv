@@ -248,7 +248,7 @@ function list_dirs() {
         ### path.
         local path="$1"; shift
 
-        echo "$( find "${path}" -maxdepth 1 -mindepth 1 -type d | sed 's/.*\///' | sort -V )"
+        find "${path}" -maxdepth 1 -mindepth 1 -type d -printf "%f\0" | sort -zV
 }
 
 function list_dir_paths() {
@@ -256,7 +256,7 @@ function list_dir_paths() {
         ### path.
         local path="$1"; shift
 
-        echo "$( find "${path}" -maxdepth 1 -mindepth 1 -type d | sort -V )"
+        find "${path}" -maxdepth 1 -mindepth 1 -type d -print0 | sort -zV
 }
 
 function list_files() {
@@ -269,7 +269,7 @@ function list_files() {
                 local pattern="*"
         fi
 
-        list_file_paths "$path" "$pattern" | xargs -I{} basename {}
+        find "${path}" -maxdepth 1 -mindepth 1 -type f -name "${pattern}" -printf "%f\0" | sort -zV
 }
 
 function list_file_paths() {
@@ -282,5 +282,5 @@ function list_file_paths() {
                 local pattern="*"
         fi
 
-        find "${path}" -maxdepth 1 -mindepth 1 -type f -name "${pattern}" | sort -V
+        find "${path}" -maxdepth 1 -mindepth 1 -type f -name "${pattern}" -print0 | sort -zV
 }
