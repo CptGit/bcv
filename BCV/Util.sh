@@ -181,7 +181,7 @@ function assert_var_set() {
 
         local name="$1"; shift
         if ! is_variable_set "$name"; then
-                log e "Variable \"${name}\" is NOT set!"
+                log_e_and_exit "Variable \"${name}\" is NOT set!"
         fi
 }
 
@@ -190,7 +190,7 @@ function assert_file_exists() {
         ### @file the path of the given file
 
         local file="$1"; shift
-        test -f "$file" || log e "File $file does NOT exist!"
+        test -f "$file" || log_e_and_exit "File $file does NOT exist!"
 }
 
 
