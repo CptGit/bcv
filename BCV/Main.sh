@@ -101,7 +101,7 @@ function set_fields() {
                 else
                         ## If the field is NOT defined, we throw an
                         ## error.
-                        log e "Field ${k} is NOT defined!"
+                        log_e_and_exit "Field ${k} is NOT defined!"
                 fi
         done
 
@@ -117,7 +117,7 @@ function set_fields() {
                 else
                         ## If the field is NOT defined, we throw an
                         ## error.
-                        log e "Field ${opt} is NOT defined!"
+                        log_e_and_exit "Field ${opt} is NOT defined!"
                 fi
         done
 }
