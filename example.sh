@@ -27,7 +27,7 @@ function hello() {
         ### If option `quiet` is not set, then print the message.
 
         if ! _bool_ $f_quiet; then
-                printf "Hello, ${f_msg}!\n"
+                println_err "Hello, ${f_msg}!"
         fi
 }
 
